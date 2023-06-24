@@ -3,7 +3,7 @@ import config from 'config'
 
 
 /**
- * 
+ * Sign JWT
  * @param object 
  * @param keyName 
  * @param options 
@@ -23,7 +23,7 @@ export function signJwt(
 }
 
 /**
- * 
+ * Verify JWT
  * @param token 
  * @param keyName 
  * @returns 

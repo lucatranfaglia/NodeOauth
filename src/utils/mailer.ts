@@ -4,11 +4,10 @@ import log from "./logger";
 
 
 
-async function createTestCreds(){
+async function createTestCreds(): Promise<void>{
   const creds = await nodemailer.createTestAccount();
   console.log({creds});
 }
-
 
 createTestCreds();
 

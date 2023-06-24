@@ -4,12 +4,18 @@ import config from 'config';
 import connectToDb from './utils/connectToDb';
 import log from './utils/logger';
 import routes from './routes';
+import deserializeUser from './middleware/deserializeUser';
 
 const app = express();
-app.use(routes);
+// -------------------------------
 app.use(express.json() );
-const port = config.get('port');
+// -------------------------------
+app.use(deserializeUser);
+// -------------------------------
+app.use(routes);
 
+// -------------------------------
+const port = config.get('port');
 app.listen(port , () =>{
   log.info(`App started at http://localhost:${port}`);
   connectToDb();

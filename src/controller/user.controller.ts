@@ -1,4 +1,3 @@
-
 import express, { Request, Response } from "express";
 import { CreateUserInput, ForgotPasswordInput, ResetPasswordInput, VerifyUserInput } from "../schema/user.schema";
 import { createUser, findUserById, findUserByEmail  } from "../services/user.service";
@@ -32,6 +31,7 @@ export async function createUserHandler(req: Request<{},{}, CreateUserInput>, re
   }
 }
 
+// ------------------------------------------------------------------
 /**
  * Verify user
  * @param req : params.id, params.verificationCode
@@ -66,6 +66,7 @@ export async function verifyUserHandler(req: Request<VerifyUserInput>, res: Resp
   return res.send("Could not verify user");
 }
 
+// ------------------------------------------------------------------
 /**
  * Forgot password
  * @param req : req.body.email
@@ -106,11 +107,23 @@ export async function forgotPasswordHandler(req: Request<{},{}, ForgotPasswordIn
   return res.send(message);
 }
 
+// ------------------------------------------------------------------
+/**
+ * Reset password
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 export async function resetPasswordHandler(req: Request<ResetPasswordInput["params"],{}, ResetPasswordInput["body"]>, res: Response){
 
   const {id, passwordResetCode} = req.params;
   const {password} = req.body;
-  const user = await findUserById(id);
+  let user;
+  try {
+    user = await findUserById(id);    
+  } catch (error) {
+    return res.status(500).send(`findUserById: ${error}`);
+  }
 
   if(!user || !user.passwordResetCode || user.passwordResetCode!==passwordResetCode){
     return res.status(400).send("Could not reset user password")
@@ -121,9 +134,24 @@ export async function resetPasswordHandler(req: Request<ResetPasswordInput["para
   // update new password
   user.password = password;
 
-  await user.save();
+  try {
+    await user.save();    
+  } catch (error) {
+    return res.status(500).send(`user.save: ${error}`);
+  }
 
   return res.send("Successfully updated password!")
+}
+
+// ------------------------------------------------------------------
+/**
+ * Return user locals
+ * @param req 
+ * @param res 
+ * @returns 
+ */
+export async function getCurrentUserHandler(req: Request, res: Response){
+  return res.send(res.locals.user);
 }
 
 

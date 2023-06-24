@@ -5,7 +5,7 @@ import UserModel, { User } from "../model/user.model";
  * @param input 
  * @returns 
  */
-export function createUser(input: Partial<User>){
+export async function createUser(input: Partial<User>){
   return UserModel.create(input)
 }
 // -----------------------------------------------
@@ -14,7 +14,7 @@ export function createUser(input: Partial<User>){
  * @param id 
  * @returns 
  */
-export function findUserById(id: string){
+export async function findUserById(id: string){
   return UserModel.findById(id);
 }
 // -----------------------------------------------
@@ -23,7 +23,7 @@ export function findUserById(id: string){
  * @param email 
  * @returns 
  */
-export function findUserByEmail(email: string){
+export async function findUserByEmail(email: string){
   // return UserModel.findOne({email}).lean();
   return UserModel.findOne({email});
 }
