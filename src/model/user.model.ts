@@ -1,5 +1,13 @@
 
-import {Severity, getModelForClass, modelOptions, prop, pre, index } from "@typegoose/typegoose";
+import {
+  getModelForClass,
+  modelOptions,
+  prop,
+  Severity,
+  pre,
+  DocumentType,
+  index,
+} from "@typegoose/typegoose";
 import { nanoid } from "nanoid";
 import argon2 from "argon2";
 import log from "../utils/logger";
@@ -12,7 +20,7 @@ export const privateFields = [
   "__v",
   "verificationCode",
   "passwordResetCode",
-  "validatePassword",
+  "verified",
 ]
 
 
@@ -58,7 +66,7 @@ export class User{
   verified: boolean;
 
   // async validatePassword(this: DocumentType<User>, candidatePassword: string){
-  async validatePassword(this: User, candidatePassword: string){
+  async validatePassword(this: DocumentType<User>, candidatePassword: string){
     try {
       return await argon2.verify(this.password, candidatePassword);
     } catch (error) {
